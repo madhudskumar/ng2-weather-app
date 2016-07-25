@@ -1,0 +1,12 @@
+<div class="assertive">
+    <h1 class="margin-left">Weather</h1>
+    <input type="text" class="margin-left" [(ngModel)]="city" placeholder="enter the city name" (keyup)="addCity(city,$event)">
+</div>
+
+<div>
+    <div class="'margin-left card" *ngFor="let w of weatherOfCities">
+        <h2>{{w.city}}</h2>
+        <p>{{w.main}}</p>
+        <p>{{w.description}}</p>
+    </div>
+</div>

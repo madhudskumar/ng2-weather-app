@@ -1,5 +1,5 @@
 {
-  "name": "ng2-template",
+  "name": "ng2-weather-app",
   "version": "1.0.0",
   "scripts": {
     "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",

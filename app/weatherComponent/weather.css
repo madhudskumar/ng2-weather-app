@@ -1,0 +1,15 @@
+
+.assertive{
+    background-color:greenyellow;
+}
+
+.card{
+    padding:20px;
+    background-color: grey;
+    color: black;
+    border-bottom: 2px solid black;
+}
+
+.margin-left{
+    margin-left:20px;
+}
