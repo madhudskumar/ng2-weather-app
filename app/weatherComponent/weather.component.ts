@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { weather } from './weather.class'
-import {el} from "@angular/platform-browser/esm/testing/browser_util";
+import {weather} from './weather.class'
+import {WeatherService} from './weather.service'
 
 @Component({
     selector: 'my-app',
     templateUrl: 'app/weatherComponent/weather.html',
     styleUrls:['app/weatherComponent/weather.css'],
+    providers:[WeatherService]
 })
 
 export class WeatherComponent {
@@ -14,7 +15,9 @@ export class WeatherComponent {
     public weatherOfCities:Array<weather>;
     public noCityError:string;
 
-    constructor(){
+    constructor(
+        private _weatherService:WeatherService
+    ){
         this.cities = [];
         this.weatherOfCities = [];
         this.city = '';
@@ -24,38 +27,29 @@ export class WeatherComponent {
     addCity(city:string, $event){
         if($event.keyCode == 13){
             this.noCityError = undefined;
-            let weather:weather = this.getWeather(city);
+            this._weatherService.getWeather(city)
+                .subscribe(weather => {
+                    if(weather){
+                        console.log(weather);
+                        this.weatherOfCities.push(weather);
+                        this.noCityError = undefined;
+                    }else{
+                        this.noCityError = 'no weather for' + city;
+                    }
+                });
 
-            if(!weather){
-                this.noCityError = 'this city does not exists';
-                return;
-            }
-
-            if(!this.weatherOfCities) this.weatherOfCities.push(weather);
-
-            if(!this.exists(this.weatherOfCities, weather.id)){
-                this.weatherOfCities.push(weather);
-            }else this.noCityError = 'city already present';
+            // if(!weather){
+            //     this.noCityError = 'this city does not exists';
+            //     return;
+            // }
+            //
+            // if(!this.weatherOfCities) this.weatherOfCities.push(weather);
+            //
+            // if(!this._weatherService.exists(this.weatherOfCities, weather.id)){
+            //     this.weatherOfCities.push(weather);
+            // }else this.noCityError = 'city already present';
 
             this.city = '';
         }
     }
-
-    //local functions
-    exists = function(cityWeather:Array<weather>, id:number){
-        for(let weather of cityWeather){
-            if(weather.id === id){
-                return true
-            }
-        }
-        return false;
-    };
-
-    getWeather = function(city:string){
-        if(city.toUpperCase() === 'DVG')
-            return new weather(1, 'Davangere', 'rainy');
-        else if (city.toUpperCase() === 'WEA')
-            return new weather(2, 'wea', 'what is ');
-        else return undefined;
-    };
 }

@@ -9,47 +9,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var weather_class_1 = require('./weather.class');
+var weather_service_1 = require('./weather.service');
 var WeatherComponent = (function () {
-    function WeatherComponent() {
-        //local functions
-        this.exists = function (cityWeather, id) {
-            for (var _i = 0, cityWeather_1 = cityWeather; _i < cityWeather_1.length; _i++) {
-                var weather_1 = cityWeather_1[_i];
-                if (weather_1.id === id) {
-                    return true;
-                }
-            }
-            return false;
-        };
-        this.getWeather = function (city) {
-            if (city.toUpperCase() === 'DVG')
-                return new weather_class_1.weather(1, 'Davangere', 'rainy');
-            else if (city.toUpperCase() === 'WEA')
-                return new weather_class_1.weather(2, 'wea', 'what is ');
-            else
-                return undefined;
-        };
+    function WeatherComponent(_weatherService) {
+        this._weatherService = _weatherService;
         this.cities = [];
         this.weatherOfCities = [];
         this.city = '';
         this.noCityError = undefined;
     }
     WeatherComponent.prototype.addCity = function (city, $event) {
+        var _this = this;
         if ($event.keyCode == 13) {
             this.noCityError = undefined;
-            var weather_2 = this.getWeather(city);
-            if (!weather_2) {
-                this.noCityError = 'this city does not exists';
-                return;
-            }
-            if (!this.weatherOfCities)
-                this.weatherOfCities.push(weather_2);
-            if (!this.exists(this.weatherOfCities, weather_2.id)) {
-                this.weatherOfCities.push(weather_2);
-            }
-            else
-                this.noCityError = 'city already present';
+            this._weatherService.getWeather(city)
+                .subscribe(function (weather) {
+                if (weather) {
+                    console.log(weather);
+                    _this.weatherOfCities.push(weather);
+                    _this.noCityError = undefined;
+                }
+                else {
+                    _this.noCityError = 'no weather for' + city;
+                }
+            });
+            // if(!weather){
+            //     this.noCityError = 'this city does not exists';
+            //     return;
+            // }
+            //
+            // if(!this.weatherOfCities) this.weatherOfCities.push(weather);
+            //
+            // if(!this._weatherService.exists(this.weatherOfCities, weather.id)){
+            //     this.weatherOfCities.push(weather);
+            // }else this.noCityError = 'city already present';
             this.city = '';
         }
     };
@@ -58,8 +51,9 @@ var WeatherComponent = (function () {
             selector: 'my-app',
             templateUrl: 'app/weatherComponent/weather.html',
             styleUrls: ['app/weatherComponent/weather.css'],
+            providers: [weather_service_1.WeatherService]
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [weather_service_1.WeatherService])
     ], WeatherComponent);
     return WeatherComponent;
 }());
