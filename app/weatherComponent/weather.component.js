@@ -16,7 +16,6 @@ var WeatherComponent = (function () {
         this.exists = function (cityWeather, id) {
             for (var _i = 0, cityWeather_1 = cityWeather; _i < cityWeather_1.length; _i++) {
                 var weather_1 = cityWeather_1[_i];
-                console.log(weather_1);
                 if (weather_1.id === id) {
                     return true;
                 }
@@ -24,24 +23,33 @@ var WeatherComponent = (function () {
             return false;
         };
         this.getWeather = function (city) {
-            if (city.toUpperCase() === 'DVG') {
+            if (city.toUpperCase() === 'DVG')
                 return new weather_class_1.weather(1, 'Davangere', 'rainy');
-            }
+            else if (city.toUpperCase() === 'WEA')
+                return new weather_class_1.weather(2, 'wea', 'what is ');
             else
-                return new weather_class_1.weather(2, 'wea', 'sad');
+                return undefined;
         };
         this.cities = [];
         this.weatherOfCities = [];
         this.city = '';
+        this.noCityError = undefined;
     }
     WeatherComponent.prototype.addCity = function (city, $event) {
         if ($event.keyCode == 13) {
+            this.noCityError = undefined;
             var weather_2 = this.getWeather(city);
-            console.log(weather_2);
-            if (!this.exists(this.weatherOfCities, weather_2.id)) {
-                if (!this.weatherOfCities.indexOf(weather_2))
-                    this.weatherOfCities.push(weather_2);
+            if (!weather_2) {
+                this.noCityError = 'this city does not exists';
+                return;
             }
+            if (!this.weatherOfCities)
+                this.weatherOfCities.push(weather_2);
+            if (!this.exists(this.weatherOfCities, weather_2.id)) {
+                this.weatherOfCities.push(weather_2);
+            }
+            else
+                this.noCityError = 'city already present';
             this.city = '';
         }
     };

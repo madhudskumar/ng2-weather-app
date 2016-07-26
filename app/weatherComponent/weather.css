@@ -13,3 +13,11 @@
 .margin-left{
     margin-left:20px;
 }
+
+.error{
+    color: red;
+    font-size: 12px;
+    padding:0;
+    margin-top:0px;
+    margin-left:20px;
+}

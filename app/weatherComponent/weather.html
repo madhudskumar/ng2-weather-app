@@ -1,6 +1,10 @@
 <div class="assertive">
     <h1 class="margin-left">Weather</h1>
-    <input type="text" class="margin-left" [(ngModel)]="city" placeholder="enter the city name" (keyup)="addCity(city,$event)">
+    <input type="text" class="margin-left" [(ngModel)]="city" placeholder="enter the city name" (keyup)="addCity(city, $event)">
+</div>
+
+<div>
+    <p class="margin-left error" *ngIf="noCityError">{{noCityError}}</p>
 </div>
 
 <div>
